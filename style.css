@@ -1,0 +1,16 @@
+a img {
+    width: 150px;
+    transition: transform 0.3s; 
+}
+
+a img:hover {
+    transform: scale(1.05);
+}
+body{
+   background-image: url(ChatGPT\ Image\ 29\ يوليو\ 2026،\ 11_55_44\ ص.png);
+}
+*{
+    margin: 2.5px ;
+    
+}
+

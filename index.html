@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Yazo Web</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+:root{
+--bg:#050811;
+--card:#101a2d;
+--card2:#080e19;
+--text:#fff;
+--muted:#8eadd0;
+--border:#243653;
+--blue:#008cff;
+--red:#ff1744;
+--input:#0b1220;
+--shadow:#008cff55;
+}
+
+body.light{
+--bg:#eef4fb;
+--card:#fff;
+--card2:#f5f8fc;
+--text:#111827;
+--muted:#53657a;
+--border:#c9d7e8;
+--input:#fff;
+--shadow:#168cff44;
+}
+
+body{
+margin:0;
+min-height:100vh;
+font-family:Arial,Tahoma,sans-serif;
+color:var(--text);
+background:
+radial-gradient(circle at 10% 0%,#063b70,transparent 35%),
+radial-gradient(circle at 90% 0%,#65091d,transparent 35%),
+var(--bg);
+transition:.3s;
+}
+
+body.light{
+background:
+radial-gradient(circle at 10% 0%,#cce8ff,transparent 35%),
+radial-gradient(circle at 90% 0%,#ffd5df,transparent 35%),
+var(--bg);
+}
+
+header{
+text-align:center;
+padding:25px 15px 15px;
+}
+
+.yazo-logo{
+font-size:75px;
+font-weight:900;
+letter-spacing:-6px;
+line-height:1;
+}
+
+.y-blue{
+color:#008cff;
+text-shadow:0 0 8px #008cff,0 0 25px #008cff;
+}
+
+.y-red{
+color:#ff1744;
+text-shadow:0 0 8px #ff1744,0 0 25px #ff1744;
+}
+
+.description{
+margin-top:10px;
+color:var(--muted);
+}
+
+.top-buttons{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:10px;
+padding:10px 15px 15px;
+}
+
+.top-button{
+border:1px solid var(--border);
+border-radius:20px;
+padding:10px 16px;
+background:var(--card);
+color:var(--text);
+cursor:pointer;
+transition:.2s;
+}
+
+.top-button:hover,
+.top-button.active{
+background:var(--blue);
+color:white;
+border-color:var(--blue);
+transform:translateY(-2px);
+}
+
+.search-box{
+width:90%;
+max-width:900px;
+margin:auto;
+}
+
+#search{
+width:100%;
+padding:17px 25px;
+border:2px solid var(--blue);
+border-radius:35px;
+outline:none;
+background:var(--input);
+color:var(--text);
+font-size:18px;
+}
+
+#search::placeholder{
+color:var(--muted);
+}
+
+.categories{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:10px;
+padding:20px;
+}
+
+.category{
+padding:10px 17px;
+border:1px solid var(--border);
+border-radius:20px;
+background:var(--card);
+color:var(--text);
+cursor:pointer;
+transition:.2s;
+}
+
+.category:hover,
+.category.active{
+background:var(--blue);
+color:white;
+border-color:var(--blue);
+}
+
+#counter{
+text-align:center;
+color:var(--muted);
+margin:5px 0 20px;
+}
+
+#sites{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+gap:18px;
+}
+
+.site{
+position:relative;
+min-height:170px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+border:1px solid var(--border);
+border-radius:20px;
+background:linear-gradient(145deg,var(--card),var(--card2));
+text-decoration:none;
+transition:.25s;
+}
+
+.site:hover{
+transform:translateY(-7px) scale(1.02);
+border-color:var(--blue);
+box-shadow:0 0 25px var(--shadow);
+}
+
+.site img{
+width:65px;
+height:65px;
+margin-bottom:12px;
+padding:5px;
+object-fit:contain;
+border-radius:14px;
+background:white;
+}
+
+.site-name{
+max-width:90%;
+overflow:hidden;
+color:var(--text);
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+.site-category{
+margin-top:6px;
+font-size:11px;
+color:var(--muted);
+}
+
+.favorite{
+position:absolute;
+top:7px;
+left:7px;
+z-index:5;
+border:none;
+background:none;
+color:#777;
+font-size:22px;
+cursor:pointer;
+}
+
+.favorite.active{
+color:gold;
+text-shadow:0 0 10px gold;
+}
+
+.hide-site{
+position:absolute;
+top:8px;
+right:8px;
+z-index:5;
+border:none;
+background:#0006;
+color:#aaa;
+width:28px;
+height:28px;
+border-radius:50%;
+cursor:pointer;
+}
+
+.hide-site:hover{
+background:#ff1744;
+color:white;
+}
+
+.floating{
+position:fixed;
+bottom:25px;
+z-index:20;
+width:60px;
+height:60px;
+border:none;
+border-radius:50%;
+color:white;
+cursor:pointer;
+box-shadow:0 5px 25px #0008;
+transition:.2s;
+}
+
+.floating:hover{
+transform:scale(1.12);
+}
+
+#randomButton{
+right:25px;
+background:linear-gradient(135deg,#ff1744,#ff7b00);
+font-size:24px;
+}
+
+#addButton{
+left:25px;
+background:linear-gradient(135deg,#008cff,#ff1744);
+font-size:30px;
+}
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+z-index:100;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:#0009;
+backdrop-filter:blur(8px);
+}
+
+.modal.show{
+display:flex;
+}
+
+.modal-box{
+position:relative;
+width:100%;
+max-width:450px;
+padding:30px;
+border:1px solid var(--blue);
+border-radius:25px;
+background:linear-gradient(145deg,var(--card),var(--card2));
+box-shadow:0 0 40px var(--shadow);
+animation:popup .2s ease;
+}
+
+@keyframes popup{
+from{
+opacity:0;
+transform:scale(.8);
+}
+to{
+opacity:1;
+transform:scale(1);
+}
+}
+
+.modal-box h2{
+margin-top:0;
+margin-bottom:25px;
+text-align:center;
+color:var(--text);
+}
+
+.modal-box input,
+.modal-box select{
+width:100%;
+margin-bottom:15px;
+padding:15px;
+border:1px solid var(--border);
+border-radius:12px;
+outline:none;
+background:var(--input);
+color:var(--text);
+font-size:16px;
+}
+
+.modal-box input:focus,
+.modal-box select:focus{
+border-color:var(--blue);
+box-shadow:0 0 15px var(--shadow);
+}
+
+#saveSite{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#008cff,#ff1744);
+color:white;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.close{
+position:absolute;
+top:10px;
+left:15px;
+border:none;
+background:none;
+color:#aaa;
+font-size:30px;
+cursor:pointer;
+}
+
+.close:hover{
+color:var(--red);
+}
+
+.message{
+min-height:20px;
+margin-top:12px;
+text-align:center;
+font-size:14px;
+}
+
+.success{
+color:#00e676;
+}
+
+.error{
+color:#ff5252;
+}
+
+#empty{
+display:none;
+text-align:center;
+margin:50px;
+color:var(--muted);
+font-size:18px;
+}
+
+#restoreButton{
+display:none;
+margin:10px auto 25px;
+padding:10px 18px;
+border:1px solid var(--border);
+border-radius:20px;
+background:var(--card);
+color:var(--text);
+cursor:pointer;
+}
+
+#restoreButton.show{
+display:block;
+}
+
+@media(max-width:600px){
+
+.yazo-logo{
+font-size:52px;
+}
+
+#sites{
+grid-template-columns:repeat(auto-fill,minmax(105px,1fr));
+padding:12px;
+gap:10px;
+}
+
+.site{
+min-height:145px;
+}
+
+.modal-box{
+padding:25px 20px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="yazo-logo">
+<span class="y-blue">Y</span><span class="y-red">azo</span>
+</div>
+
+<div class="description">
+🌐 كل مواقعك وبرامجك في مكان واحد 🚀
+</div>
+
+</header>
+
+<div class="top-buttons">
+
+<button class="top-button" id="themeButton">
+🌙 الثيم
+</button>
+
+<button class="top-button" id="favoriteButton">
+⭐ المفضلة
+</button>
+
+<button class="top-button" id="hiddenButton">
+👁️ المخفية
+</button>
+
+</div>
+
+<div class="search-box">
+
+<input
+id="search"
+type="search"
+placeholder="🔎 ابحث في Yazo..."
+autocomplete="off">
+
+</div>
+
+<div class="categories">
+
+<button class="category active" data-category="all">
+🌐 الكل
+</button>
+
+<button class="category" data-category="games">
+🎮 الألعاب
+</button>
+
+<button class="category" data-category="video">
+🎬 الفيديو
+</button>
+
+<button class="category" data-category="education">
+📚 التعليم
+</button>
+
+<button class="category" data-category="social">
+👥 التواصل
+</button>
+
+<button class="category" data-category="ai">
+🤖 الذكاء الاصطناعي
+</button>
+
+<button class="category" data-category="tools">
+🛠️ الأدوات
+</button>
+
+<button class="category" data-category="programming">
+💻 البرمجة
+</button>
+
+<button class="category" data-category="music">
+🎵 الموسيقى
+</button>
+
+<button class="category" data-category="news">
+📰 الأخبار
+</button>
+
+</div>
+
+<div id="counter"></div>
+
+<button id="restoreButton">
+↩️ إظهار كل المواقع المخفية
+</button>
+
+<div id="empty">
+😢 مفيش مواقع مطابقة
+</div>
+
+<div id="sites"></div>
+
+<button id="randomButton" class="floating">
+🎲
+</button>
+
+<button id="addButton" class="floating">
++
+</button>
+
+<div id="addModal" class="modal">
+
+<div class="modal-box">
+
+<button id="closeModal" class="close">
+×
+</button>
+
+<h2>
+➕ إضافة موقع جديد
+</h2>
+
+<input
+id="siteName"
+type="text"
+placeholder="📝 اسم الموقع">
+
+<input
+id="siteUrl"
+type="text"
+placeholder="🔗 رابط الموقع">
+
+<select id="siteCategory">
+
+<option value="tools">🛠️ الأدوات</option>
+<option value="games">🎮 الألعاب</option>
+<option value="video">🎬 الفيديو</option>
+<option value="education">📚 التعليم</option>
+<option value="social">👥 التواصل</option>
+<option value="ai">🤖 الذكاء الاصطناعي</option>
+<option value="programming">💻 البرمجة</option>
+<option value="music">🎵 الموسيقى</option>
+<option value="news">📰 الأخبار</option>
+
+</select>
+
+<button id="saveSite">
+✅ إضافة الموقع
+</button>
+
+<div id="message" class="message"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const defaultSites=[
+
+{
+name:"Google",
+url:"https://www.google.com",
+category:"tools"
+},
+
+{
+name:"YouTube",
+url:"https://www.youtube.com",
+category:"video"
+},
+
+{
+name:"ChatGPT",
+url:"https://chatgpt.com",
+category:"ai"
+},
+
+{
+name:"Facebook",
+url:"https://www.facebook.com",
+category:"social"
+},
+
+{
+name:"Instagram",
+url:"https://www.instagram.com",
+category:"social"
+},
+
+{
+name:"TikTok",
+url:"https://www.tiktok.com",
+category:"video"
+},
+
+{
+name:"Wikipedia",
+url:"https://www.wikipedia.org",
+category:"education"
+},
+
+{
+name:"Coursera",
+url:"https://www.coursera.org",
+category:"education"
+},
+
+{
+name:"Khan Academy",
+url:"https://www.khanacademy.org",
+category:"education"
+},
+
+{
+name:"Roblox",
+url:"https://www.roblox.com",
+category:"games"
+},
+
+{
+name:"Poki",
+url:"https://poki.com",
+category:"games"
+},
+
+{
+name:"CrazyGames",
+url:"https://www.crazygames.com",
+category:"games"
+},
+
+{
+name:"Discord",
+url:"https://discord.com",
+category:"social"
+},
+
+{
+name:"Reddit",
+url:"https://www.reddit.com",
+category:"social"
+},
+
+{
+name:"GitHub",
+url:"https://github.com",
+category:"programming"
+},
+
+{
+name:"CodePen",
+url:"https://codepen.io",
+category:"programming"
+},
+
+{
+name:"Stack Overflow",
+url:"https://stackoverflow.com",
+category:"programming"
+},
+
+{
+name:"Canva",
+url:"https://www.canva.com",
+category:"tools"
+},
+
+{
+name:"Spotify",
+url:"https://open.spotify.com",
+category:"music"
+},
+
+{
+name:"SoundCloud",
+url:"https://soundcloud.com",
+category:"music"
+},
+
+{
+name:"Twitch",
+url:"https://www.twitch.tv",
+category:"video"
+},
+
+{
+name:"LinkedIn",
+url:"https://www.linkedin.com",
+category:"social"
+},
+
+{
+name:"MDN",
+url:"https://developer.mozilla.org",
+category:"programming"
+},
+
+{
+name:"W3Schools",
+url:"https://www.w3schools.com",
+category:"education"
+},
+
+{
+name:"freeCodeCamp",
+url:"https://www.freecodecamp.org",
+category:"programming"
+}
+
+];
+
+const savedSites=
+JSON.parse(
+localStorage.getItem("yazoSites")||"[]"
+);
+
+const sites=[
+...defaultSites,
+...savedSites
+];
+
+const generatedIcons={
+games:["🎮","👾","🕹️","🏎️","⚔️","🚀","🏆","🎯"],
+video:["🎬","▶️","📺","🎥","🍿","📹","🎞️","🔴"],
+education:["📚","📖","🎓","🧠","🔬","✏️","📝","🏫"],
+social:["👥","💬","🗨️","🤝","❤️","🌐","📱","👤"],
+ai:["🤖","🧠","⚡","🔮","💡","✨","🧬","🚀"],
+tools:["🛠️","⚙️","🔧","🔨","🧰","📐","🔎","⚡"],
+programming:["💻","👨‍💻","</>","{ }","⚙️","🖥️","⌨️","🚀"],
+music:["🎵","🎧","🎶","🎤","🎹","🥁","🎸","🔊"],
+news:["📰","📢","🌍","📡","🔴","📣","🗞️","🌐"]
+};
+
+const generatedNames={
+games:["Game","Gaming","Arcade","Puzzle","Racing","Action","Adventure"],
+video:["Video","Movie","Stream","Player","Cinema","TV","Clips"],
+education:["Learn","Study","School","Academy","Courses","Science","Math"],
+social:["Social","Chat","Friends","Community","Forum","Connect","Groups"],
+ai:["AI","AI Assistant","AI Writer","AI Image","AI Chat","AI Code"],
+tools:["Tool","Converter","Calculator","Editor","Generator","Translator"],
+programming:["Code","Developer","Programming","Compiler","IDE","Python","JavaScript"],
+music:["Music","Song","Audio","Radio","Beats","Sound","Playlist"],
+news:["News","World News","Tech News","Sports News","Daily News"]
+};
+
+function generateSites(){
+
+const categories=Object.keys(generatedIcons);
+
+let number=1;
+
+while(sites.length<10000){
+
+const category=
+categories[
+(number-1)%categories.length
+];
+
+const icon=
+generatedIcons[category]
+[
+(number-1)%
+generatedIcons[category].length
+];
+
+const baseName=
+generatedNames[category]
+[
+(number-1)%
+generatedNames[category].length
+];
+
+const name=
+baseName+" "+number;
+
+sites.push({
+
+name:name,
+
+url:
+"https://www.google.com/search?q="+
+encodeURIComponent(name),
+
+category:category,
+
+generated:true,
+
+icon:icon
+
+});
+
+number++;
+
+}
+
+}
+
+generateSites();
+
+const sitesBox=
+document.getElementById("sites");
+
+const search=
+document.getElementById("search");
+
+const counter=
+document.getElementById("counter");
+
+const empty=
+document.getElementById("empty");
+
+const themeButton=
+document.getElementById("themeButton");
+
+const favoriteButton=
+document.getElementById("favoriteButton");
+
+const hiddenButton=
+document.getElementById("hiddenButton");
+
+const restoreButton=
+document.getElementById("restoreButton");
+
+const addModal=
+document.getElementById("addModal");
+
+const addButton=
+document.getElementById("addButton");
+
+const closeModal=
+document.getElementById("closeModal");
+
+const saveSite=
+document.getElementById("saveSite");
+
+const siteName=
+document.getElementById("siteName");
+
+const siteUrl=
+document.getElementById("siteUrl");
+
+const siteCategory=
+document.getElementById("siteCategory");
+
+const message=
+document.getElementById("message");
+
+let currentCategory="all";
+let showFavorites=false;
+let showHidden=false;
+
+let favorites=
+JSON.parse(
+localStorage.getItem("yazoFavorites")||"[]"
+);
+
+let hiddenSites=
+JSON.parse(
+localStorage.getItem("yazoHidden")||"[]"
+);
+
+let theme=
+localStorage.getItem("yazoTheme")||"dark";
+
+if(theme==="light"){
+document.body.classList.add("light");
+themeButton.textContent="☀️ الثيم";
+}
+
+function categoryName(category){
+
+const names={
+games:"🎮 الألعاب",
+video:"🎬 الفيديو",
+education:"📚 التعليم",
+social:"👥 التواصل",
+ai:"🤖 الذكاء الاصطناعي",
+tools:"🛠️ الأدوات",
+programming:"💻 البرمجة",
+music:"🎵 الموسيقى",
+news:"📰 الأخبار"
+};
+
+return names[category]||"🌐 عام";
+}
+
+function generatedLogo(site){
+
+const colors={
+games:["#ff1744","#ff7b00"],
+video:["#ff1744","#ff4081"],
+education:["#008cff","#00d4ff"],
+social:["#008cff","#7c4dff"],
+ai:["#7c4dff","#ff1744"],
+tools:["#00bcd4","#008cff"],
+programming:["#008cff","#00e676"],
+music:["#ff1744","#9c27b0"],
+news:["#ff9800","#ff1744"]
+};
+
+const c=
+colors[site.category]||
+["#008cff","#ff1744"];
+
+const svg=`
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">
+
+<defs>
+
+<linearGradient id="g">
+
+<stop stop-color="${c[0]}"/>
+
+<stop offset="1" stop-color="${c[1]}"/>
+
+</linearGradient>
+
+</defs>
+
+<rect width="128" height="128" rx="28" fill="#0d1627"/>
+
+<rect x="5" y="5" width="118" height="118" rx="24" fill="url(#g)" opacity=".25"/>
+
+<text x="64" y="82" text-anchor="middle" font-family="Arial" font-size="50">${site.icon||"🌐"}</text>
+
+<circle cx="103" cy="25" r="7" fill="${c[1]}"/>
+
+</svg>
+`;
+
+return "data:image/svg+xml;charset=UTF-8,"+
+encodeURIComponent(svg);
+}
+
+function getLogo(site){
+
+if(site.generated){
+return generatedLogo(site);
+}
+
+try{
+
+const domain=
+new URL(site.url).hostname;
+
+return "https://www.google.com/s2/favicons?domain="+
+domain+
+"&sz=128";
+
+}catch{
+
+return generatedLogo({
+category:site.category,
+icon:"🌐"
+});
+
+}
+
+}
+
+function render(){
+
+sitesBox.innerHTML="";
+
+const text=
+search.value
+.toLowerCase()
+.trim();
+
+let filtered=
+sites.filter(site=>{
+
+if(hiddenSites.includes(site.url)){
+return false;
+}
+
+if(showFavorites&&!favorites.includes(site.url)){
+return false;
+}
+
+const searchMatch=
+site.name
+.toLowerCase()
+.includes(text);
+
+const categoryMatch=
+currentCategory==="all"||
+site.category===currentCategory;
+
+return searchMatch&&categoryMatch;
+
+});
+
+counter.textContent=
+"🔎 عرض "+
+filtered.length+
+" من "+
+sites.length+
+" موقع / برنامج";
+
+empty.style.display=
+filtered.length?"none":"block";
+
+filtered
+.slice(0,300)
+.forEach(site=>{
+
+const card=
+document.createElement("a");
+
+card.className="site";
+
+card.href=site.url;
+
+card.target="_blank";
+
+card.rel="noopener noreferrer";
+
+const star=
+document.createElement("button");
+
+star.className="favorite";
+
+const isFavorite=
+favorites.includes(site.url);
+
+star.textContent=
+isFavorite?"★":"☆";
+
+if(isFavorite){
+star.classList.add("active");
+}
+
+star.onclick=function(e){
+
+e.preventDefault();
+e.stopPropagation();
+
+if(favorites.includes(site.url)){
+
+favorites=
+favorites.filter(
+x=>x!==site.url
+);
+
+}else{
+
+favorites.push(site.url);
+
+}
+
+localStorage.setItem(
+"yazoFavorites",
+JSON.stringify(favorites)
+);
+
+render();
+
+};
+
+const hide=
+document.createElement("button");
+
+hide.className="hide-site";
+
+hide.textContent="×";
+
+hide.title="إخفاء";
+
+hide.onclick=function(e){
+
+e.preventDefault();
+e.stopPropagation();
+
+if(!hiddenSites.includes(site.url)){
+
+hiddenSites.push(site.url);
+
+}
+
+localStorage.setItem(
+"yazoHidden",
+JSON.stringify(hiddenSites)
+);
+
+render();
+
+};
+
+const img=
+document.createElement("img");
+
+img.src=getLogo(site);
+
+img.alt=site.name;
+
+img.onerror=function(){
+
+this.onerror=null;
+
+this.src=
+generatedLogo({
+category:site.category,
+icon:site.icon||"🌐"
+});
+
+};
+
+const name=
+document.createElement("span");
+
+name.className="site-name";
+
+name.textContent=site.name;
+
+const cat=
+document.createElement("span");
+
+cat.className="site-category";
+
+cat.textContent=
+categoryName(site.category);
+
+card.appendChild(star);
+card.appendChild(hide);
+card.appendChild(img);
+card.appendChild(name);
+card.appendChild(cat);
+
+sitesBox.appendChild(card);
+
+});
+
+restoreButton.classList.toggle(
+"show",
+hiddenSites.length>0
+);
+
+}
+
+search.addEventListener(
+"input",
+render
+);
+
+document
+.querySelectorAll(".category")
+.forEach(button=>{
+
+button.addEventListener(
+"click",
+function(){
+
+document
+.querySelectorAll(".category")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+this.classList.add("active");
+
+currentCategory=
+this.dataset.category;
+
+render();
+
+}
+);
+
+});
+
+themeButton.onclick=function(){
+
+if(document.body.classList.contains("light")){
+
+document.body.classList.remove("light");
+
+theme="dark";
+
+themeButton.textContent="🌙 الثيم";
+
+}else{
+
+document.body.classList.add("light");
+
+theme="light";
+
+themeButton.textContent="☀️ الثيم";
+
+}
+
+localStorage.setItem(
+"yazoTheme",
+theme
+);
+
+};
+
+favoriteButton.onclick=function(){
+
+showFavorites=!showFavorites;
+
+showHidden=false;
+
+favoriteButton.classList.toggle(
+"active",
+showFavorites
+);
+
+hiddenButton.classList.remove(
+"active"
+);
+
+search.value="";
+
+render();
+
+};
+
+hiddenButton.onclick=function(){
+
+showHidden=!showHidden;
+
+showFavorites=false;
+
+hiddenButton.classList.toggle(
+"active",
+showHidden
+);
+
+favoriteButton.classList.remove(
+"active"
+);
+
+if(showHidden){
+
+const oldHidden=hiddenSites;
+
+hiddenSites=[];
+
+const currentSites=
+sites.filter(site=>
+oldHidden.includes(site.url)
+);
+
+hiddenSites=
+currentSites.map(site=>site.url);
+
+}else{
+
+hiddenSites=[];
+
+}
+
+render();
+
+};
+
+restoreButton.onclick=function(){
+
+hiddenSites=[];
+
+localStorage.setItem(
+"yazoHidden",
+"[]"
+);
+
+showHidden=false;
+
+hiddenButton.classList.remove(
+"active"
+);
+
+render();
+
+};
+
+addButton.onclick=function(){
+
+addModal.classList.add("show");
+
+siteName.focus();
+
+message.textContent="";
+
+};
+
+closeModal.onclick=function(){
+
+addModal.classList.remove("show");
+
+siteName.value="";
+siteUrl.value="";
+siteCategory.value="tools";
+
+message.textContent="";
+
+};
+
+addModal.onclick=function(e){
+
+if(e.target===addModal){
+
+addModal.classList.remove("show");
+
+siteName.value="";
+siteUrl.value="";
+siteCategory.value="tools";
+
+message.textContent="";
+
+}
+
+};
+
+saveSite.onclick=function(){
+
+const name=
+siteName.value.trim();
+
+let url=
+siteUrl.value.trim();
+
+const category=
+siteCategory.value;
+
+if(!name||!url){
+
+message.textContent=
+"⚠️ اكتب اسم الموقع والرابط";
+
+message.className=
+"message error";
+
+return;
+
+}
+
+if(
+!url.startsWith("http://")&&
+!url.startsWith("https://")
+){
+
+url="https://"+url;
+
+}
+
+const newSite={
+name:name,
+url:url,
+category:category,
+generated:false
+};
+
+sites.push(newSite);
+
+const saved=
+JSON.parse(
+localStorage.getItem("yazoSites")||"[]"
+);
+
+saved.push(newSite);
+
+localStorage.setItem(
+"yazoSites",
+JSON.stringify(saved)
+);
+
+message.textContent=
+"✅ تم إضافة الموقع بنجاح";
+
+message.className=
+"message success";
+
+siteName.value="";
+siteUrl.value="";
+
+render();
+
+setTimeout(()=>{
+
+addModal.classList.remove("show");
+
+message.textContent="";
+
+},800);
+
+};
+
+document
+.getElementById("randomButton")
+.onclick=function(){
+
+const list=
+sites.filter(site=>
+!hiddenSites.includes(site.url)&&
+(currentCategory==="all"||
+site.category===currentCategory)
+);
+
+if(!list.length){
+return;
+}
+
+const random=
+list[
+Math.floor(
+Math.random()*list.length
+)
+];
+
+window.open(
+random.url,
+"_blank"
+);
+
+};
+
+render();
+
+</script>
+
+</body>
+</html>
+</html>
