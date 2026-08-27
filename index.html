@@ -2144,6 +2144,327 @@ welcomeModal.classList.remove(
 render();
 
 </script>
+<!-- YAZO VIDEO MAKER -->
+<section id="yazoVideoMaker" style="
+max-width:1000px;
+margin:50px auto;
+padding:25px;
+background:#080e19;
+border:1px solid #243653;
+border-radius:25px;
+box-shadow:0 0 30px #008cff33;
+color:white;
+text-align:center;
+">
 
+<h2>🎬 فيديو تعليمي عن Yazo Web</h2>
+
+<p style="color:#8eadd0">
+أنشئ فيديو تعليمي عن Yazo Web
+</p>
+
+<div id="yazoVideoScreen" style="
+width:100%;
+aspect-ratio:16/9;
+position:relative;
+overflow:hidden;
+border-radius:20px;
+background:#02050b;
+border:2px solid #243653;
+">
+
+<div class="yazo-video-scene active">
+<div style="font-size:80px;font-weight:bold">
+<span style="color:#008cff">Y</span><span style="color:#ff1744">azo</span>
+</div>
+<h1>Yazo Web 🚀</h1>
+<p>كل مواقعك وبرامجك في مكان واحد</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:80px">🔎</div>
+<h1>ابحث بسهولة</h1>
+<p>ابحث عن أي موقع بسرعة</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:80px">📚</div>
+<h1>التصنيفات</h1>
+<p>تعليم • ألعاب • فيديو • برمجة</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:80px">⭐</div>
+<h1>المفضلة</h1>
+<p>احفظ مواقعك المفضلة</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:80px">👁️</div>
+<h1>إخفاء المواقع</h1>
+<p>اخفِ المواقع التي لا تحتاجها</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:80px">🌙</div>
+<h1>الثيم</h1>
+<p>غيّر شكل Yazo Web بسهولة</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:80px">➕</div>
+<h1>أضف موقعك</h1>
+<p>أضف أي موقع إلى Yazo Web</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:80px">🎲</div>
+<h1>موقع عشوائي</h1>
+<p>اكتشف موقعًا جديدًا</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:80px">🚀</div>
+<h1>Yazo Web</h1>
+<p>سريع وسهل ومميز</p>
+</div>
+
+<div class="yazo-video-scene">
+<div style="font-size:70px;font-weight:bold">
+<span style="color:#008cff">Y</span><span style="color:#ff1744">azo</span>
+</div>
+<h1>جرّب Yazo Web الآن 🔥</h1>
+</div>
+
+</div>
+
+<div style="
+height:7px;
+background:#17233d;
+border-radius:10px;
+overflow:hidden;
+margin-top:15px;
+">
+<div id="yazoVideoProgress" style="
+width:0%;
+height:100%;
+background:#008cff;
+"></div>
+</div>
+
+<div style="
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:10px;
+margin-top:20px;
+">
+
+<button id="yazoStartVideo" style="
+padding:14px 22px;
+border:0;
+border-radius:12px;
+background:#008cff;
+color:white;
+font-size:17px;
+cursor:pointer;
+">
+🎬 إنشاء الفيديو
+</button>
+
+<button id="yazoStopVideo" disabled style="
+padding:14px 22px;
+border:0;
+border-radius:12px;
+background:#d62828;
+color:white;
+font-size:17px;
+cursor:pointer;
+">
+⏹️ إيقاف
+</button>
+
+<button id="yazoDownloadVideo" disabled style="
+padding:14px 22px;
+border:0;
+border-radius:12px;
+background:#00a86b;
+color:white;
+font-size:17px;
+cursor:pointer;
+">
+⬇️ حفظ الفيديو
+</button>
+
+</div>
+
+<div id="yazoVideoStatus" style="
+margin-top:15px;
+color:#8eadd0;
+">
+جاهز لإنشاء الفيديو
+</div>
+
+</section>
+
+<style>
+.yazo-video-scene{
+position:absolute;
+inset:0;
+display:none;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+text-align:center;
+padding:30px;
+}
+
+.yazo-video-scene.active{
+display:flex;
+}
+
+.yazo-video-scene h1{
+font-size:42px;
+margin:10px;
+}
+
+.yazo-video-scene p{
+font-size:22px;
+color:#d5deed;
+}
+
+@media(max-width:600px){
+.yazo-video-scene h1{
+font-size:27px;
+}
+.yazo-video-scene p{
+font-size:16px;
+}
+}
+</style>
+
+<script>
+(function(){
+
+const scenes=document.querySelectorAll(".yazo-video-scene");
+const screen=document.getElementById("yazoVideoScreen");
+const start=document.getElementById("yazoStartVideo");
+const stop=document.getElementById("yazoStopVideo");
+const download=document.getElementById("yazoDownloadVideo");
+const status=document.getElementById("yazoVideoStatus");
+const progress=document.getElementById("yazoVideoProgress");
+
+let recorder=null;
+let chunks=[];
+let timer=null;
+let current=0;
+
+const sceneTime=3000;
+
+function showScene(index){
+scenes.forEach(s=>s.classList.remove("active"));
+scenes[index].classList.add("active");
+}
+
+start.onclick=function(){
+
+chunks=[];
+current=0;
+download.disabled=true;
+
+if(!screen.captureStream){
+status.textContent="❌ المتصفح لا يدعم تسجيل الفيديو";
+return;
+}
+
+const stream=screen.captureStream(30);
+
+let mime="video/webm;codecs=vp9";
+
+if(!MediaRecorder.isTypeSupported(mime)){
+mime="video/webm";
+}
+
+recorder=new MediaRecorder(stream,{mimeType:mime});
+
+recorder.ondataavailable=function(e){
+if(e.data.size>0) chunks.push(e.data);
+};
+
+recorder.onstop=function(){
+
+const blob=new Blob(chunks,{type:"video/webm"});
+const url=URL.createObjectURL(blob);
+
+download.disabled=false;
+
+download.onclick=function(){
+
+const a=document.createElement("a");
+a.href=url;
+a.download="Yazo-Web-Video.webm";
+a.click();
+
+};
+
+status.textContent="✅ تم إنشاء الفيديو! اضغط حفظ الفيديو";
+
+start.disabled=false;
+stop.disabled=true;
+
+};
+
+recorder.start();
+
+start.disabled=true;
+stop.disabled=false;
+
+status.textContent="🎬 جاري إنشاء الفيديو...";
+
+showScene(0);
+progress.style.width="0%";
+
+timer=setInterval(function(){
+
+current++;
+
+progress.style.width=
+Math.min((current/scenes.length)*100,100)+"%";
+
+if(current>=scenes.length){
+
+clearInterval(timer);
+timer=null;
+
+if(recorder && recorder.state==="recording"){
+recorder.stop();
+}
+
+return;
+}
+
+showScene(current);
+
+},sceneTime);
+
+};
+
+stop.onclick=function(){
+
+if(timer){
+clearInterval(timer);
+timer=null;
+}
+
+if(recorder && recorder.state==="recording"){
+recorder.stop();
+}
+
+stop.disabled=true;
+
+};
+
+})();
+</script>
 </body>
 </html>
